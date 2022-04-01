@@ -6,20 +6,33 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 16:14:52 by jchene            #+#    #+#             */
-/*   Updated: 2022/03/31 17:56:50 by jchene           ###   ########.fr       */
+/*   Updated: 2022/04/01 13:26:12 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-unsigned int	ft_strlen
+unsigned int	ft_strlen(char *str)
+{
+	unsigned int	i;
+
+	i = 0;
+	while (str[i])
+		i++;
+	return (i);
+}
 
 int	check_charset(char *argv, const char *charset)
 {
 	unsigned int	i;
 
-
 	i = 0;
+	while (argv[i])
+	{
+		if (is_charset(charset, argv[i]) == -1)
+			return (-1);
+		i++;
+	}
 }
 
 int	check_input(int argc, char **argv)
