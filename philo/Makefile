@@ -3,6 +3,8 @@ NAME		=	philo
 HEADER		=	./philo.h
 
 SRCS		=	./srcs/main.c\
+				./srcs/lib.c\
+				./srcs/input.c\
 
 CC			=	gcc
 
