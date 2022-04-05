@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 14:42:39 by jchene            #+#    #+#             */
-/*   Updated: 2022/04/01 15:17:02 by jchene           ###   ########.fr       */
+/*   Updated: 2022/04/05 15:13:47 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ unsigned int	is_charset(const char *charset, char c)
 	return (0);
 }
 
-unsigned int	ft_atoi(char *str)
+unsigned int	ft_atou(char *str)
 {
 	unsigned long long	ret;
 	unsigned int		i;
@@ -52,6 +52,5 @@ unsigned int	ft_atoi(char *str)
 	ret /= 10;
 	if (ret > UINT_MAX)
 		return (UINT_MAX);
-	printf("atoi: %d\n", (unsigned int)ret);
 	return ((unsigned int)ret);
 }

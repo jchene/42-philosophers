@@ -5,14 +5,16 @@ HEADER		=	./philo.h
 SRCS		=	./srcs/main.c\
 				./srcs/lib.c\
 				./srcs/input.c\
+				./srcs/memory.c\
+				./srcs/philos.c\
 
 CC			=	gcc
 
-CFLAGS		=	-Werror -Wextra -Wall -g
+CFLAGS		=	-Werror -Wextra -Wall
 
-PHILO_FLAGS	=	-lpthread -D_REENTRANT
+PHILO_FLAGS	=	-lpthread
 
-SANFLAGS	=	-fsanitize=address
+SANFLAGS	=	-g -fsanitize=address
 
 DEL			=	rm -f
 
@@ -27,7 +29,7 @@ $(NAME):		$(OBJ) $(HEADER)
 				$(CC) -o $(NAME) $(SRCS) $(CFLAGS) $(PHILO_FLAGS)
 
 san:			$(OBJ)
-				$(CC) -o $(NAME) $(SRCS) $(CFLAGS) $(PHILO_FLAGS) $(SANFLAGS)
+				$(CC) -o $(NAME) $(SRCS) $(CFLAGS) $(SANFLAGS) $(PHILO_FLAGS)
 
 clean:
 				$(DEL) $(OBJ)

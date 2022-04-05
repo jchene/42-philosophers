@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 14:40:46 by jchene            #+#    #+#             */
-/*   Updated: 2022/04/01 15:18:55 by jchene           ###   ########.fr       */
+/*   Updated: 2022/04/05 14:53:05 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,15 +40,15 @@ int	check_input(int argc, char **argv)
 	return (0);
 }
 
-int	get_input(int argc, char **argv, t_philo *philo)
+int	get_input(int argc, char **argv, t_data *data)
 {
-	philo->nb_philo = ft_atoi(argv[1]);
-	philo->death_time = ft_atoi(argv[2]);
-	philo->eat_time = ft_atoi(argv[3]);
-	philo->sleep_time = ft_atoi(argv[4]);
+	data->nb_philo = ft_atou(argv[1]);
+	data->death_time = ft_atou(argv[2]);
+	data->eat_time = ft_atou(argv[3]);
+	data->sleep_time = ft_atou(argv[4]);
 	if (argc == 6)
-		philo->max_eat = ft_atoi(argv[5]);
+		data->max_eat = ft_atou(argv[5]);
 	else
-		philo->max_eat = -1;
+		data->max_eat = -1;
 	return (0);
 }
