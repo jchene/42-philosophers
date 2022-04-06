@@ -10,7 +10,7 @@ SRCS		=	./srcs/main.c\
 
 CC			=	gcc
 
-CFLAGS		=	-Werror -Wextra -Wall
+CFLAGS		=	-Werror -Wextra -Wall -g
 
 PHILO_FLAGS	=	-lpthread
 

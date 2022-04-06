@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 16:14:03 by jchene            #+#    #+#             */
-/*   Updated: 2022/04/05 18:03:03 by jchene           ###   ########.fr       */
+/*   Updated: 2022/04/06 15:41:25 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <pthread.h>
 # include <limits.h>
 # include <string.h>
+# include <sys/time.h>
 
 //CONSTANTS
 typedef struct s_data
@@ -29,6 +30,7 @@ typedef struct s_data
 	unsigned int	eat_time;
 	unsigned int	sleep_time;
 	unsigned int	max_eat;
+
 }				t_data;
 
 //PHILOSOPHERS INNER DATA
@@ -37,6 +39,8 @@ typedef struct s_philosophers
 	t_data			data_cpy;
 	unsigned int	philo_id;
 	pthread_t		*thread;
+	pthread_mutex_t	*left_fork;
+	pthread_mutex_t	*right_fork;
 	pthread_mutex_t	*start_lock;
 }				t_philo;
 
@@ -45,7 +49,7 @@ typedef struct s_environment
 {
 	t_philo			**philos;
 	pthread_t		**threads;
-	unsigned int	**forks;
+	pthread_mutex_t	**forks;
 	pthread_mutex_t	start_lock;
 }				t_env;
 
@@ -73,7 +77,7 @@ int				free_data(int ret, t_data *data);
 int				free_all(int ret);
 
 //ENVIRONMENT
-int				get_env(t_data *data, t_env *env);
-void			init_philo(t_data *data, t_philo *tmp, t_env *env);
+void			get_env(t_data *data, t_env *env);
+void			init_philo(t_data *data, t_env *env, unsigned int i);
 void			*routine(t_philo *tmp);
 #endif

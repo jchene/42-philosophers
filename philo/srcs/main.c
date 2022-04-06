@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 16:14:52 by jchene            #+#    #+#             */
-/*   Updated: 2022/04/05 18:05:00 by jchene           ###   ########.fr       */
+/*   Updated: 2022/04/06 16:26:53 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,7 @@ int	main(int argc, char **argv)
 	if (!memset((void *)env, 0, sizeof(t_env) + 1))
 		return (free_all(-1));
 	get_all()->env = env;
-	if (get_env(data, env) == -1)
-		return (free_all(-1));
+	get_env(data, env);
 	while (1)
 	{
 		(void)env;
