@@ -6,13 +6,13 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/05 16:23:39 by jchene            #+#    #+#             */
-/*   Updated: 2022/04/06 16:25:43 by jchene           ###   ########.fr       */
+/*   Updated: 2022/04/06 18:16:44 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-void	*od_routine(t_philo *philo)
+void	routine(t_philo *philo)
 {
 	unsigned int	i;
 
@@ -24,42 +24,10 @@ void	*od_routine(t_philo *philo)
 	{
 		printf("philo %d is thinking\n", philo->philo_id);
 		usleep(50);
-		pthread_mutex_lock(philo->left_fork);
-		printf("philo %d has taken his left fork\n", philo->philo_id);
-		pthread_mutex_lock(philo->right_fork);
-		printf("philo %d has taken his right fork\n", philo->philo_id);
+		get_forks(philo);
 		printf("philo %d is eating\n", philo->philo_id);
 		usleep(1000 * philo->data_cpy.eat_time);
-		pthread_mutex_unlock(philo->right_fork);
-		pthread_mutex_unlock(philo->left_fork);
-		printf("philo %d is sleeping\n", philo->philo_id);
-		usleep(1000 * philo->data_cpy.sleep_time);
-		i++;
-	}
-	printf("philo %d has died\n", philo->philo_id);
-	pthread_exit(NULL);
-}
-
-void	*ev_routine(t_philo *philo)
-{
-	unsigned int	i;
-
-	i = 0;
-	pthread_mutex_lock(philo->start_lock);
-	pthread_mutex_unlock(philo->start_lock);
-	printf("philo %d is living!\n", philo->philo_id);
-	while (i < philo->data_cpy.max_eat)
-	{
-		printf("philo %d is thinking\n", philo->philo_id);
-		usleep(100);
-		pthread_mutex_lock(philo->right_fork);
-		printf("philo %d has taken his right fork\n", philo->philo_id);
-		pthread_mutex_lock(philo->left_fork);
-		printf("philo %d has taken his left fork\n", philo->philo_id);
-		printf("philo %d is eating\n", philo->philo_id);
-		usleep(1000 * philo->data_cpy.eat_time);
-		pthread_mutex_unlock(philo->left_fork);
-		pthread_mutex_unlock(philo->right_fork);
+		drop_forks(philo);
 		printf("philo %d is sleeping\n", philo->philo_id);
 		usleep(1000 * philo->data_cpy.sleep_time);
 		i++;
@@ -102,7 +70,7 @@ void	init_env(t_data *data, t_env *env)
 	}
 }
 
-void	get_env(t_data *data, t_env *env)
+void	start_simul(t_data *data, t_env *env)
 {
 	unsigned int	i;
 
@@ -113,12 +81,8 @@ void	get_env(t_data *data, t_env *env)
 	while (i < data->nb_philo)
 	{
 		init_philo(data, env, i);
-		if (i % 2)
-			pthread_create(env->philos[i]->thread, NULL,
-				(void *)od_routine, (void *)env->philos[i]);
-		else
-			pthread_create(env->philos[i]->thread, NULL,
-				(void *)ev_routine, (void *)env->philos[i]);
+		pthread_create(env->philos[i]->thread, NULL, (void *)routine,
+			(void *)env->philos[i]);
 		i++;
 	}
 	pthread_mutex_unlock(&(env->start_lock));

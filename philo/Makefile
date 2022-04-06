@@ -7,6 +7,7 @@ SRCS		=	./srcs/main.c\
 				./srcs/input.c\
 				./srcs/memory.c\
 				./srcs/philos.c\
+				./srcs/mutex.c\
 
 CC			=	gcc
 

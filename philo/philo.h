@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 16:14:03 by jchene            #+#    #+#             */
-/*   Updated: 2022/04/06 15:41:25 by jchene           ###   ########.fr       */
+/*   Updated: 2022/04/06 18:14:36 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,8 +76,14 @@ t_free			*get_all(void);
 int				free_data(int ret, t_data *data);
 int				free_all(int ret);
 
-//ENVIRONMENT
-void			get_env(t_data *data, t_env *env);
+//SIMULATION INIT
+void			start_simul(t_data *data, t_env *env);
 void			init_philo(t_data *data, t_env *env, unsigned int i);
-void			*routine(t_philo *tmp);
+void			init_env(t_data *data, t_env *env);
+void			*od_routine(t_philo *tmp);
+void			*ev_routine(t_philo *tmp);
+
+//MUTEX
+void			get_forks(t_philo *philo);
+void			drop_forks(t_philo *philo);
 #endif
