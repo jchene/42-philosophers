@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 16:14:03 by jchene            #+#    #+#             */
-/*   Updated: 2022/04/08 15:49:35 by jchene           ###   ########.fr       */
+/*   Updated: 2022/04/08 17:42:23 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ int				free_all(int ret);
 void			get_data_cpy(t_data *src, t_data *dst);
 void			init_philo(t_data *data, t_env *env, unsigned int i);
 void			init_env(t_data *data, t_env *env);
+void			set_start_time(t_data *data, t_env *env, t_reaper *reaper_data);
 
 //CORE CODE
 void			routine(t_philo *philo);

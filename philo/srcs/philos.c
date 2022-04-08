@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/05 16:23:39 by jchene            #+#    #+#             */
-/*   Updated: 2022/04/08 16:00:03 by jchene           ###   ########.fr       */
+/*   Updated: 2022/04/08 17:48:33 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,5 +80,6 @@ void	start_simul(t_data *data, t_env *env)
 	get_data_cpy(data, &(reaper_data.data_cpy));
 	pthread_create(&env->reaper, NULL, (void *)reaper_routine,
 		(void *)(&reaper_data));
+	//set_start_time(data, env, &reaper_data);
 	pthread_mutex_unlock(&(env->start_lock));
 }

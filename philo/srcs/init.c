@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/08 15:05:40 by jchene            #+#    #+#             */
-/*   Updated: 2022/04/08 15:42:43 by jchene           ###   ########.fr       */
+/*   Updated: 2022/04/08 17:46:32 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,22 @@ void	init_env(t_data *data, t_env *env)
 		env->forks[i] = ft_calloc(sizeof(pthread_mutex_t));
 		pthread_mutex_init(env->forks[i], NULL);
 		env->philos[i]->last_eat = ft_calloc(sizeof(struct timeval));
+		i++;
+	}
+}
+
+void	set_start_time(t_data *data, t_env *env, t_reaper *reaper_data)
+{
+	unsigned int	i;
+	struct timeval	timestamp;
+
+	i = 0;
+	gettimeofday(&timestamp, NULL);
+	data->start_time = timestamp;
+	reaper_data->data_cpy.start_time = timestamp;
+	while (i < data->nb_philo)
+	{
+		env->philos[i]->data_cpy.start_time = timestamp;
 		i++;
 	}
 }
