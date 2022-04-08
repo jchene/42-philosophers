@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 16:14:03 by jchene            #+#    #+#             */
-/*   Updated: 2022/04/06 18:14:36 by jchene           ###   ########.fr       */
+/*   Updated: 2022/04/08 15:49:35 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,19 +29,23 @@ typedef struct s_data
 	unsigned int	death_time;
 	unsigned int	eat_time;
 	unsigned int	sleep_time;
-	unsigned int	max_eat;
+	int				max_eat;
+	struct timeval	start_time;
 
 }				t_data;
 
-//PHILOSOPHERS INNER DATA
+//PHILOSOPHERS DATA
 typedef struct s_philosophers
 {
 	t_data			data_cpy;
 	unsigned int	philo_id;
 	pthread_t		*thread;
+	struct timeval	*last_eat;
+	pthread_mutex_t	eat_lock;
 	pthread_mutex_t	*left_fork;
 	pthread_mutex_t	*right_fork;
 	pthread_mutex_t	*start_lock;
+	pthread_mutex_t	*stop_lock;
 }				t_philo;
 
 //ENVIRONMENT DATA
@@ -49,9 +53,18 @@ typedef struct s_environment
 {
 	t_philo			**philos;
 	pthread_t		**threads;
+	pthread_t		reaper;
 	pthread_mutex_t	**forks;
 	pthread_mutex_t	start_lock;
+	pthread_mutex_t	stop_lock;
 }				t_env;
+
+//REAPER DATA
+typedef struct s_reaper
+{
+	t_data			data_cpy;
+	t_env			*env;
+}				t_reaper;
 
 //FREE ACCESS ADDRESSES
 typedef struct s_free_singleton
@@ -77,13 +90,22 @@ int				free_data(int ret, t_data *data);
 int				free_all(int ret);
 
 //SIMULATION INIT
-void			start_simul(t_data *data, t_env *env);
+void			get_data_cpy(t_data *src, t_data *dst);
 void			init_philo(t_data *data, t_env *env, unsigned int i);
 void			init_env(t_data *data, t_env *env);
-void			*od_routine(t_philo *tmp);
-void			*ev_routine(t_philo *tmp);
 
-//MUTEX
+//CORE CODE
+void			routine(t_philo *philo);
+void			reaper_routine(t_reaper *reaper_data);
+void			start_simul(t_data *data, t_env *env);
+
+//ROUTINE MUTEX
+void			try_lock(pthread_mutex_t *lock);
+void			get_eat_time(t_philo *philo);
 void			get_forks(t_philo *philo);
 void			drop_forks(t_philo *philo);
+
+//TIME MANAGEMENT
+unsigned int	get_ms_dif(struct timeval s_time);
+
 #endif

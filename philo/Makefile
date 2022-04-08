@@ -6,8 +6,10 @@ SRCS		=	./srcs/main.c\
 				./srcs/lib.c\
 				./srcs/input.c\
 				./srcs/memory.c\
+				./srcs/init.c\
 				./srcs/philos.c\
 				./srcs/mutex.c\
+				./srcs/time.c\
 
 CC			=	gcc
 

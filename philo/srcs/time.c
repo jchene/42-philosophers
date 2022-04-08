@@ -1,35 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   time.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/29 16:14:52 by jchene            #+#    #+#             */
-/*   Updated: 2022/04/08 15:22:02 by jchene           ###   ########.fr       */
+/*   Created: 2022/04/08 14:40:10 by jchene            #+#    #+#             */
+/*   Updated: 2022/04/08 15:43:50 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-int	main(int argc, char **argv)
+/*unsigned int	get_s_dif(struct timeval s_time)
 {
-	t_data	data;
-	t_env	env;
+}*/
 
-	if (argc < 5 || argc > 6)
-		return (-1);
-	if (check_input(argc, argv) == -1)
-		return (-1);
-	get_all()->data = &data;
-	if (get_input(argc, argv, &data) == -1)
-		return (free_data(-1, &data));
-	get_all()->env = &env;
-	start_simul(&data, &env);
-	while (1)
-	{
-		(void)env;
-	}
-	free_all(0);
-	return (0);
+unsigned int	get_ms_dif(struct timeval s_time)
+{
+	time_t			sec;
+	suseconds_t		usec;
+	unsigned int	ms_dif;
+	struct timeval	timestamp;
+
+	gettimeofday(&timestamp, NULL);
+	sec = timestamp.tv_sec - s_time.tv_sec;
+	usec = timestamp.tv_usec - s_time.tv_usec;
+	ms_dif = ((unsigned int)sec * 1000) + ((unsigned int)usec / 1000);
+	return (ms_dif);
 }
