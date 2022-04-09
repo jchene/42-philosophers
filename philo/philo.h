@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 16:14:03 by jchene            #+#    #+#             */
-/*   Updated: 2022/04/09 15:44:37 by jchene           ###   ########.fr       */
+/*   Updated: 2022/04/09 21:34:13 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,56 +22,71 @@
 # include <string.h>
 # include <sys/time.h>
 
-//CONSTANTS
-typedef struct s_data
+# define FIRST	1
+# define LAST	2
+
+# define FORK	1
+# define EAT	2
+# define SLEEP	3
+# define THINK	4
+# define DIE	5
+
+//PHILOSOPHERS
+typedef struct s_philosophers
+{
+	unsigned int	eat_time;
+	unsigned int	sleep_time;
+	int				max_meal;
+
+	unsigned int	nb_meal;
+	struct timeval	start_time;
+
+	unsigned int	id;
+	pthread_t		thread;
+
+	struct timeval	last_eat;
+	pthread_mutex_t	eat_lock;
+	unsigned int	live;
+	pthread_mutex_t	live_lock;
+
+	pthread_mutex_t	left_fork;
+	pthread_mutex_t	*right_fork;
+
+	pthread_mutex_t	*start_lock;
+	pthread_mutex_t	*print_lock;
+}				t_philo;
+
+//REAPER
+typedef struct s_reaper
 {
 	unsigned int	nb_philo;
 	unsigned int	death_time;
-	unsigned int	eat_time;
-	unsigned int	sleep_time;
-	int				max_eat;
-	struct timeval	start_time;
+	unsigned int	dead_id;
 
-}				t_data;
-
-//PHILOSOPHERS DATA
-typedef struct s_philosophers
-{
-	t_data			data_cpy;
-	unsigned int	philo_id;
-	pthread_t		*thread;
-	struct timeval	*last_eat;
-	pthread_mutex_t	eat_lock;
-	pthread_mutex_t	*left_fork;
-	pthread_mutex_t	*right_fork;
-	pthread_mutex_t	*start_lock;
-	pthread_mutex_t	*stop_lock;
-}				t_philo;
-
-//ENVIRONMENT DATA
-typedef struct s_environment
-{
 	t_philo			**philos;
-	pthread_t		**threads;
-	pthread_t		reaper;
-	pthread_mutex_t	**forks;
-	pthread_mutex_t	start_lock;
-	pthread_mutex_t	stop_lock;
-}				t_env;
+	pthread_t		thread;
 
-//REAPER DATA
-typedef struct s_reaper
-{
-	t_data			data_cpy;
-	t_env			*env;
+	pthread_mutex_t	*start_lock;
 }				t_reaper;
 
-//FREE ACCESS ADDRESSES
-typedef struct s_free_singleton
+//ENVIRONMENT
+typedef struct s_environment
 {
-	t_data			*data;
-	t_env			*env;
-}				t_free;
+	unsigned int	eat_time;
+	unsigned int	sleep_time;
+	int				max_meal;
+
+	unsigned int	nb_philo;
+	unsigned int	death_time;
+
+	struct timeval	start_time;
+
+	t_philo			**philos;
+	t_reaper		reaper;
+
+	pthread_mutex_t	start_lock;
+	pthread_mutex_t	print_lock;
+}				t_env;
 
 //LIB
 unsigned int	ft_strlen(char *str);
@@ -81,33 +96,34 @@ unsigned int	ft_atou(char *str);
 //INPUT
 int				check_charset(char *argv, const char *charset);
 int				check_input(int argc, char **argv);
-int				get_input(int argc, char **argv, t_data *data);
-
-//MEMORY MANAGEMENT
-void			*ft_calloc(size_t size);
-t_free			*get_all(void);
-int				free_data(int ret, t_data *data);
-int				free_all(int ret);
+int				get_input(int argc, char **argv, t_env *env);
 
 //SIMULATION INIT
-void			get_data_cpy(t_data *src, t_data *dst);
-void			init_philo(t_data *data, t_env *env, unsigned int i);
-void			init_env(t_data *data, t_env *env);
-void			set_start_time(t_data *data, t_env *env, t_reaper *reaper_data);
+void			init_env(t_env *env);
+void			init_philo(t_env *env, t_philo *philo, unsigned int i);
+void			link_forks(t_env *env);
+void			init_reaper(t_env *env, t_reaper *reaper);
+void			init_join(t_env *env);
 
 //CORE CODE
+int				check_life(t_philo *philo, unsigned int fork);
 void			routine(t_philo *philo);
 void			reaper_routine(t_reaper *reaper_data);
-void			start_simul(t_data *data, t_env *env);
+void			start_simul(t_env *env);
 
 //ROUTINE MUTEX
 void			try_lock(pthread_mutex_t *lock);
-void			get_eat_time(t_philo *philo);
+void			set_eat_time(t_philo *philo);
 void			get_forks(t_philo *philo);
 void			drop_forks(t_philo *philo);
+void			print_state(t_philo *philo, unsigned int state);
 
 //TIME MANAGEMENT
 unsigned int	get_ms_dif(struct timeval s_time);
-void			msleep(unsigned int wait);
+int				msleep(unsigned int wait, t_philo *philo);
+
+//MEMORY MANAGEMENT
+void			*ft_calloc(size_t size);
+int				free_all(int ret);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/08 14:40:10 by jchene            #+#    #+#             */
-/*   Updated: 2022/04/09 15:38:01 by jchene           ###   ########.fr       */
+/*   Updated: 2022/04/09 21:19:13 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ unsigned int	get_ms_dif(struct timeval s_time)
 	return (ms_dif);
 }
 
-void	msleep(unsigned int wait)
+int	msleep(unsigned int wait, t_philo *philo)
 {
 	struct timeval	timestamp;
 	struct timeval	end;
@@ -44,5 +44,9 @@ void	msleep(unsigned int wait)
 	{
 		gettimeofday(&timestamp, NULL);
 		usleep(10);
+		pthread_mutex_lock(&(philo->live_lock));
+		if (philo->live != 1)
+			return (pthread_mutex_unlock(&(philo->live_lock)) - 1);
 	}
+	return (0);
 }
