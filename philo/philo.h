@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 16:14:03 by jchene            #+#    #+#             */
-/*   Updated: 2022/04/08 17:42:23 by jchene           ###   ########.fr       */
+/*   Updated: 2022/04/09 15:44:37 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,5 +108,6 @@ void			drop_forks(t_philo *philo);
 
 //TIME MANAGEMENT
 unsigned int	get_ms_dif(struct timeval s_time);
+void			msleep(unsigned int wait);
 
 #endif

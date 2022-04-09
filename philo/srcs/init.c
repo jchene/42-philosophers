@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/08 15:05:40 by jchene            #+#    #+#             */
-/*   Updated: 2022/04/08 17:46:32 by jchene           ###   ########.fr       */
+/*   Updated: 2022/04/09 15:20:27 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	get_data_cpy(t_data *src, t_data *dst)
 void	init_philo(t_data *data, t_env *env, unsigned int i)
 {
 	get_data_cpy(data, &(env->philos[i]->data_cpy));
-	env->philos[i]->philo_id = i;
+	env->philos[i]->philo_id = i + 1;
 	if (i == 0)
 		env->philos[i]->left_fork = env->forks[data->nb_philo - 1];
 	else
