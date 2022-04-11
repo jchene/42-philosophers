@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/05 16:23:39 by jchene            #+#    #+#             */
-/*   Updated: 2022/04/11 18:31:08 by jchene           ###   ########.fr       */
+/*   Updated: 2022/04/11 19:36:42 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,18 +46,19 @@ void	routine(t_philo *philo)
 	while ((philo->max_meal < 0)
 		|| ((long)philo->nb_meal < (long)philo->max_meal))
 	{
-		if (check_life(philo) == -1)
-			break ;
+		/*if (check_life(philo) == -1)
+			break ;*/
 		get_fork(philo, FIRST);
 		/*if (check_fork_drop(philo, FIRST) == -1)
 			break ;*/
 		get_fork(philo, LAST);
 		if (check_fork_drop(philo, LAST) == -1)
 			break ;
+		
 		print_state(philo, EAT);
-		set_eat_time(philo);
 		if (msleep(philo->eat_time, philo, EAT) == -1)
 			break ;
+		set_eat_time(philo);
 		drop_forks(philo);
 		print_state(philo, SLEEP);
 		if (msleep(philo->sleep_time, philo, SLEEP) == -1)
@@ -71,7 +72,7 @@ void	routine(t_philo *philo)
 
 void	reaper_routine(t_reaper *reaper)
 {
-	int				i;
+	unsigned int	i;
 	unsigned int	j;
 
 	i = 0;
@@ -99,6 +100,12 @@ void	reaper_routine(t_reaper *reaper)
 		usleep(50);
 		i++;
 	}
+	i = 0;
+	while (i < reaper->nb_philo)
+	{
+		pthread_join(reaper->philos[i]->thread, NULL);
+		i++;
+	}
 	pthread_exit(NULL);
 }
 
@@ -122,11 +129,5 @@ void	start_simul(t_env *env)
 		(void *)&(env->reaper));
 	pthread_mutex_unlock(&(env->start_lock));
 	pthread_join(env->reaper.thread, NULL);
-	i = 0;
-	while (i < env->nb_philo)
-	{
-		pthread_join(env->philos[i]->thread, NULL);
-		i++;
-	}
 	print_state(env->reaper.philos[env->reaper.dead_id - 1], DIE);
 }

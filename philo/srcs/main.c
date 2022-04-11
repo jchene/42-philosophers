@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 16:14:52 by jchene            #+#    #+#             */
-/*   Updated: 2022/04/11 16:49:26 by jchene           ###   ########.fr       */
+/*   Updated: 2022/04/11 19:13:19 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ int	main(int argc, char **argv)
 	if (get_input(argc, argv, &env) == -1)
 		return (-1);
 	start_simul(&env);
-	usleep(10000);
 	destroy_mutexes(&env);
 	free_all(&env);
 	return (0);

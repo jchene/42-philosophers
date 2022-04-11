@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 17:54:57 by jchene            #+#    #+#             */
-/*   Updated: 2022/04/11 18:50:03 by jchene           ###   ########.fr       */
+/*   Updated: 2022/04/11 19:39:28 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,4 +57,13 @@ void	set_eat_time(t_philo *philo)
 	pthread_mutex_lock(&(philo->eat_lock));
 	gettimeofday(&(philo->last_eat), NULL);
 	pthread_mutex_unlock(&(philo->eat_lock));
+}
+
+void	switch_locks(t_philo *philo, unsigned int state)
+{
+	if (stats == ON)
+	{
+		pthread_mutex_lock(&(philo->live_lock));
+		pthread_mutex_lock();
+	}
 }

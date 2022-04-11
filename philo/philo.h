@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 16:14:03 by jchene            #+#    #+#             */
-/*   Updated: 2022/04/11 18:46:19 by jchene           ###   ########.fr       */
+/*   Updated: 2022/04/11 19:24:46 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,9 @@
 # include <limits.h>
 # include <string.h>
 # include <sys/time.h>
+
+# define ON		1
+# define OFF	0
 
 # define FIRST	1
 # define LAST	2

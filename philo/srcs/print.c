@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/11 18:45:44 by jchene            #+#    #+#             */
-/*   Updated: 2022/04/11 18:49:38 by jchene           ###   ########.fr       */
+/*   Updated: 2022/04/11 19:14:50 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	ft_putnbr(unsigned int nb)
 {
 	char	nb2;
 
-	if (nb > 10)
+	if (nb >= 10)
 		ft_putnbr(nb / 10);
 	nb2 = (nb % 10) + '0';
 	write(1, &nb2, 1);
