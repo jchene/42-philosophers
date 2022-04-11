@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 16:14:03 by jchene            #+#    #+#             */
-/*   Updated: 2022/04/09 21:34:13 by jchene           ###   ########.fr       */
+/*   Updated: 2022/04/11 18:46:19 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,10 +103,9 @@ void			init_env(t_env *env);
 void			init_philo(t_env *env, t_philo *philo, unsigned int i);
 void			link_forks(t_env *env);
 void			init_reaper(t_env *env, t_reaper *reaper);
-void			init_join(t_env *env);
 
 //CORE CODE
-int				check_life(t_philo *philo, unsigned int fork);
+int				check_fork_drop(t_philo *philo, unsigned int fork);
 void			routine(t_philo *philo);
 void			reaper_routine(t_reaper *reaper_data);
 void			start_simul(t_env *env);
@@ -114,16 +113,21 @@ void			start_simul(t_env *env);
 //ROUTINE MUTEX
 void			try_lock(pthread_mutex_t *lock);
 void			set_eat_time(t_philo *philo);
-void			get_forks(t_philo *philo);
+void			get_fork(t_philo *philo, unsigned int fork);
 void			drop_forks(t_philo *philo);
+
+//PRINTING
+void			ft_putstr(char *str);
+void			ft_putnbr(unsigned int nb);
 void			print_state(t_philo *philo, unsigned int state);
 
 //TIME MANAGEMENT
 unsigned int	get_ms_dif(struct timeval s_time);
-int				msleep(unsigned int wait, t_philo *philo);
+int				msleep(unsigned int wait, t_philo *philo, unsigned int type);
 
 //MEMORY MANAGEMENT
 void			*ft_calloc(size_t size);
-int				free_all(int ret);
+void			destroy_mutexes(t_env *env);
+void			free_all(t_env *env);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/08 15:05:40 by jchene            #+#    #+#             */
-/*   Updated: 2022/04/09 21:32:50 by jchene           ###   ########.fr       */
+/*   Updated: 2022/04/11 15:56:16 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,13 +33,13 @@ void	init_philo(t_env *env, t_philo *philo, unsigned int i)
 	philo->nb_meal = 0;
 	philo->start_time = env->start_time;
 	philo->id = i + 1;
-	philo->last_eat = env->start_time;
+	philo->last_eat = philo->start_time;
 	pthread_mutex_init(&(philo->eat_lock), NULL);
 	philo->live = 1;
 	pthread_mutex_init(&(philo->live_lock), NULL);
-	pthread_mutex_init(&(philo->right_fork), NULL);
+	pthread_mutex_init(&(philo->left_fork), NULL);
 	philo->start_lock = &(env->start_lock);
-	philo->start_lock = &(env->print_lock);
+	philo->print_lock = &(env->print_lock);
 }
 
 void	link_forks(t_env *env)
@@ -62,14 +62,4 @@ void	init_reaper(t_env *env, t_reaper *reaper)
 	reaper->philos = env->philos;
 	reaper->start_lock = &(env->start_lock);
 	reaper->dead_id = 0;
-}
-
-void	init_join(t_env *env)
-{
-	unsigned int	i;
-
-	i = 0;
-	while (i < env->nb_philo)
-		pthread_join(env->philos[i++]->thread, NULL);
-	pthread_join(env->reaper.thread, NULL);
 }

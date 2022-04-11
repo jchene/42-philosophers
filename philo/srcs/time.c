@@ -6,47 +6,82 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/08 14:40:10 by jchene            #+#    #+#             */
-/*   Updated: 2022/04/09 21:19:13 by jchene           ###   ########.fr       */
+/*   Updated: 2022/04/11 18:25:49 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-unsigned int	get_ms_dif(struct timeval s_time)
+unsigned int	get_us_dif(struct timeval s_time)
 {
-	time_t			sec;
-	suseconds_t		usec;
-	unsigned int	ms_dif;
-	struct timeval	timestamp;
+	struct timeval	*future;
+	struct timeval	*past;
+	unsigned int	dif;
+	struct timeval	stamp;
 
-	gettimeofday(&timestamp, NULL);
-	sec = timestamp.tv_sec - s_time.tv_sec;
-	usec = 1000000 - s_time.tv_usec + timestamp.tv_usec;
-	ms_dif = ((unsigned int)sec * 1000) + ((unsigned int)usec / 1000);
-	return (ms_dif);
+	gettimeofday(&stamp, NULL);
+	if (s_time.tv_sec > stamp.tv_sec)
+		future = &s_time;
+	else if (s_time.tv_sec == stamp.tv_sec && s_time.tv_usec > stamp.tv_usec)
+		future = &s_time;
+	else
+		future = &stamp;
+	if (future == &s_time)
+		past = &stamp;
+	else
+		past = &s_time;
+	dif = future->tv_sec - past->tv_sec;
+	dif = dif * 1000000;
+	dif = (dif - past->tv_usec) + future->tv_usec;
+	return (dif);
 }
 
-int	msleep(unsigned int wait, t_philo *philo)
+unsigned int	get_ms_dif(struct timeval s_time)
 {
-	struct timeval	timestamp;
-	struct timeval	end;
-	unsigned int	ms;
+	struct timeval	*future;
+	struct timeval	*past;
+	unsigned int	dif;
+	struct timeval	stamp;
 
-	ms = wait;
-	gettimeofday(&timestamp, NULL);
-	end.tv_sec = timestamp.tv_sec + (ms / 1000);
-	ms = ms % 1000;
-	end.tv_usec = timestamp.tv_usec + (ms * 1000);
+	gettimeofday(&stamp, NULL);
+	if (s_time.tv_sec > stamp.tv_sec)
+		future = &s_time;
+	else if (s_time.tv_sec == stamp.tv_sec && s_time.tv_usec > stamp.tv_usec)
+		future = &s_time;
+	else
+		future = &stamp;
+	if (future == &s_time)
+		past = &stamp;
+	else
+		past = &s_time;
+	dif = future->tv_sec - past->tv_sec;
+	dif = dif * 1000000;
+	dif = (dif - past->tv_usec) + future->tv_usec;
+	return ((dif / 1000));
+}
+
+int	msleep(unsigned int wait, t_philo *philo, unsigned int type)
+{
+	struct timeval	stamp;
+	struct timeval	end;
+
+	gettimeofday(&stamp, NULL);
+	end.tv_sec = stamp.tv_sec + (wait / 1000);
+	end.tv_usec = stamp.tv_usec + ((wait % 1000) * 1000);
 	end.tv_sec = end.tv_sec + (end.tv_usec / 1000000);
 	end.tv_usec = end.tv_usec % 1000000;
-	while ((timestamp.tv_sec < end.tv_sec)
-		|| (timestamp.tv_sec == end.tv_sec && timestamp.tv_usec < end.tv_usec))
+	while (get_ms_dif(end) > 0)
 	{
-		gettimeofday(&timestamp, NULL);
-		usleep(10);
+		usleep(50);
 		pthread_mutex_lock(&(philo->live_lock));
 		if (philo->live != 1)
-			return (pthread_mutex_unlock(&(philo->live_lock)) - 1);
+		{
+			pthread_mutex_unlock(&(philo->live_lock));
+			if (type == EAT)
+				drop_forks(philo);
+			return (-1);
+		}
+		pthread_mutex_unlock(&(philo->live_lock));
 	}
 	return (0);
 }

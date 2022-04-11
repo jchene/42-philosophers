@@ -1,30 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   test.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/29 16:14:52 by jchene            #+#    #+#             */
-/*   Updated: 2022/04/11 16:49:26 by jchene           ###   ########.fr       */
+/*   Created: 2022/04/11 13:48:41 by jchene            #+#    #+#             */
+/*   Updated: 2022/04/11 18:39:55 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
+/*int	main(int argc, char **argv)
+{
+	t_philo			philo;
+	struct timeval	time;
+
+	(void)argc;
+	philo.live = 1;
+	pthread_mutex_init(&(philo.live_lock), NULL);
+	gettimeofday(&time, NULL);
+	msleep(ft_atou(argv[1]), &philo);
+	printf("diff: %u\n", get_ms_dif(time));
+	pthread_mutex_destroy(&(philo.live_lock));
+	return (0);
+}*/
+
 int	main(int argc, char **argv)
 {
-	t_env	env;
-
-	if (argc < 5 || argc > 6)
-		return (-1);
-	if (check_input(argc, argv) == -1)
-		return (-1);
-	if (get_input(argc, argv, &env) == -1)
-		return (-1);
-	start_simul(&env);
-	usleep(10000);
-	destroy_mutexes(&env);
-	free_all(&env);
+	(void)argc;
+	ft_putnbr(ft_atou(argv[1]));
 	return (0);
 }

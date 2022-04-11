@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/05 16:16:24 by jchene            #+#    #+#             */
-/*   Updated: 2022/04/09 21:35:07 by jchene           ###   ########.fr       */
+/*   Updated: 2022/04/11 18:27:18 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,4 +15,33 @@
 void	*ft_calloc(size_t size)
 {
 	return (memset((malloc(size)), 0, size));
+}
+
+void	destroy_mutexes(t_env *env)
+{
+	unsigned int	i;
+
+	i = 0;
+	pthread_mutex_destroy(&(env->start_lock));
+	pthread_mutex_destroy(&(env->print_lock));
+	while (i < env->nb_philo)
+	{
+		pthread_mutex_destroy(&(env->philos[i]->eat_lock));
+		pthread_mutex_destroy(&(env->philos[i]->live_lock));
+		pthread_mutex_destroy(&(env->philos[i]->left_fork));
+		i++;
+	}
+}
+
+void	free_all(t_env *env)
+{
+	unsigned int	i;
+
+	i = 0;
+	while (i < env->nb_philo)
+	{
+		free(env->philos[i]);
+		i++;
+	}
+	free(env->philos);
 }
