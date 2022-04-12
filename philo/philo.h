@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 16:14:03 by jchene            #+#    #+#             */
-/*   Updated: 2022/04/11 19:24:46 by jchene           ###   ########.fr       */
+/*   Updated: 2022/04/12 18:29:01 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@
 # include <string.h>
 # include <sys/time.h>
 
-# define ON		1
-# define OFF	0
+# define PAST	0
+# define FUTURE	1
 
 # define FIRST	1
 # define LAST	2
@@ -33,6 +33,7 @@
 # define SLEEP	3
 # define THINK	4
 # define DIE	5
+# define TEST	6
 
 //PHILOSOPHERS
 typedef struct s_philosophers
@@ -49,6 +50,8 @@ typedef struct s_philosophers
 
 	struct timeval	last_eat;
 	pthread_mutex_t	eat_lock;
+	unsigned int	is_eating;
+	pthread_mutex_t	eating_lock;
 	unsigned int	live;
 	pthread_mutex_t	live_lock;
 
@@ -118,6 +121,8 @@ void			try_lock(pthread_mutex_t *lock);
 void			set_eat_time(t_philo *philo);
 void			get_fork(t_philo *philo, unsigned int fork);
 void			drop_forks(t_philo *philo);
+void			set_var(pthread_mutex_t *lock, unsigned int *var,
+					unsigned int value);
 
 //PRINTING
 void			ft_putstr(char *str);
@@ -126,7 +131,8 @@ void			print_state(t_philo *philo, unsigned int state);
 
 //TIME MANAGEMENT
 unsigned int	get_ms_dif(struct timeval s_time);
-int				msleep(unsigned int wait, t_philo *philo, unsigned int type);
+int				msleep(unsigned int wait);
+int				mcheck_sleep(unsigned int wait, t_philo *philo);
 
 //MEMORY MANAGEMENT
 void			*ft_calloc(size_t size);

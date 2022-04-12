@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 17:54:57 by jchene            #+#    #+#             */
-/*   Updated: 2022/04/11 19:39:28 by jchene           ###   ########.fr       */
+/*   Updated: 2022/04/12 18:37:31 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,11 +59,9 @@ void	set_eat_time(t_philo *philo)
 	pthread_mutex_unlock(&(philo->eat_lock));
 }
 
-void	switch_locks(t_philo *philo, unsigned int state)
+void	set_var(pthread_mutex_t *lock, unsigned int *var, unsigned int value)
 {
-	if (stats == ON)
-	{
-		pthread_mutex_lock(&(philo->live_lock));
-		pthread_mutex_lock();
-	}
+	pthread_mutex_lock(lock);
+	*var = value;
+	pthread_mutex_unlock(lock);
 }

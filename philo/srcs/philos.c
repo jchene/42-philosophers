@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/05 16:23:39 by jchene            #+#    #+#             */
-/*   Updated: 2022/04/11 19:36:42 by jchene           ###   ########.fr       */
+/*   Updated: 2022/04/12 18:37:00 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,27 +46,28 @@ void	routine(t_philo *philo)
 	while ((philo->max_meal < 0)
 		|| ((long)philo->nb_meal < (long)philo->max_meal))
 	{
-		/*if (check_life(philo) == -1)
-			break ;*/
+		if (check_life(philo) == -1)
+			break ;
 		get_fork(philo, FIRST);
-		/*if (check_fork_drop(philo, FIRST) == -1)
-			break ;*/
+		if (check_fork_drop(philo, FIRST) == -1)
+			break ;
 		get_fork(philo, LAST);
 		if (check_fork_drop(philo, LAST) == -1)
 			break ;
-		
+		set_var(&(philo->eating_lock), &(philo->is_eating), 1);
 		print_state(philo, EAT);
-		if (msleep(philo->eat_time, philo, EAT) == -1)
-			break ;
+		msleep(philo->eat_time);
 		set_eat_time(philo);
 		drop_forks(philo);
+		set_var(&(philo->eating_lock), &(philo->is_eating), 0);
 		print_state(philo, SLEEP);
-		if (msleep(philo->sleep_time, philo, SLEEP) == -1)
+		if (mcheck_sleep(philo->sleep_time, philo) == -1)
 			break ;
 		print_state(philo, THINK);
 		usleep(50);
 		philo->nb_meal++;
 	}
+	print_state(philo, DIE);
 	pthread_exit(NULL);
 }
 
@@ -82,22 +83,27 @@ void	reaper_routine(t_reaper *reaper)
 	{
 		i = i % reaper->nb_philo;
 		pthread_mutex_lock(&(reaper->philos[i]->eat_lock));
-		if ((get_ms_dif(reaper->philos[i]->last_eat)) > reaper->death_time)
+		pthread_mutex_lock(&(reaper->philos[i]->eating_lock));
+		if (((get_ms_dif(reaper->philos[i]->last_eat)) > reaper->death_time)
+			&& (reaper->philos[i]->is_eating == 0))
 		{
 			pthread_mutex_unlock(&(reaper->philos[i]->eat_lock));
+			pthread_mutex_unlock(&(reaper->philos[i]->eating_lock));
 			reaper->dead_id = reaper->philos[i]->id;
 			while (j < reaper->nb_philo)
 			{
-				pthread_mutex_lock(&(reaper->philos[j]->live_lock));
-				reaper->philos[j]->live = 0;
-				pthread_mutex_unlock(&(reaper->philos[j]->live_lock));
+				set_var(&(reaper->philos[j]->live_lock),
+					&(reaper->philos[j]->live), 0);
 				j++;
 			}
 			break ;
 		}
 		else
+		{
 			pthread_mutex_unlock(&(reaper->philos[i]->eat_lock));
-		usleep(50);
+			pthread_mutex_unlock(&(reaper->philos[i]->eating_lock));
+		}
+		usleep(100);
 		i++;
 	}
 	i = 0;
@@ -106,6 +112,7 @@ void	reaper_routine(t_reaper *reaper)
 		pthread_join(reaper->philos[i]->thread, NULL);
 		i++;
 	}
+	print_state(reaper->philos[reaper->dead_id], DIE);
 	pthread_exit(NULL);
 }
 

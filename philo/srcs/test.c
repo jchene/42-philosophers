@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/11 13:48:41 by jchene            #+#    #+#             */
-/*   Updated: 2022/04/11 18:39:55 by jchene           ###   ########.fr       */
+/*   Updated: 2022/04/12 17:33:28 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,6 @@
 int	main(int argc, char **argv)
 {
 	(void)argc;
-	ft_putnbr(ft_atou(argv[1]));
+	(void)argv;
 	return (0);
 }

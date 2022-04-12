@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/11 18:45:44 by jchene            #+#    #+#             */
-/*   Updated: 2022/04/11 19:14:50 by jchene           ###   ########.fr       */
+/*   Updated: 2022/04/12 18:02:25 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,5 +49,7 @@ void	print_state(t_philo *philo, unsigned int state)
 		ft_putstr("is thinking\n");
 	else if (state == DIE)
 		ft_putstr("has died\n");
+	else if (state == TEST)
+		ft_putstr("is testing\n");
 	pthread_mutex_unlock(philo->print_lock);
 }
