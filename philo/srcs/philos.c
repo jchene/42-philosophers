@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/05 16:23:39 by jchene            #+#    #+#             */
-/*   Updated: 2022/04/14 17:11:58 by jchene           ###   ########.fr       */
+/*   Updated: 2022/04/14 18:02:02 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,9 @@ void	routine(t_philo *philo)
 			break ;
 		get_last_fork(philo);
 		set_var(&(philo->eating_lock), &(philo->is_eating), 1);
+		set_eat_time(philo);
 		print_state(philo, "is eating");
 		msleep(philo->eat_time);
-		set_eat_time(philo);
 		set_var(&(philo->eating_lock), &(philo->is_eating), 0);
 		drop_forks(philo);
 		print_state(philo, "is sleeping");
@@ -116,7 +116,7 @@ void	start_simul(t_env *env)
 	pthread_create(&(env->reaper.thread), NULL, (void *)reaper_routine,
 		(void *)&(env->reaper));
 	pthread_mutex_unlock(&(env->start_lock1));
-	msleep(1);
+	usleep(42);
 	pthread_mutex_unlock(&(env->start_lock2));
 	pthread_join(env->reaper.thread, NULL);
 }

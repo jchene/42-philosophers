@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/08 14:40:10 by jchene            #+#    #+#             */
-/*   Updated: 2022/04/12 17:34:47 by jchene           ###   ########.fr       */
+/*   Updated: 2022/04/14 18:05:06 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ int	msleep(unsigned int wait)
 	end.tv_sec = end.tv_sec + (end.tv_usec / 1000000);
 	end.tv_usec = end.tv_usec % 1000000;
 	while (get_tempo(end) != PAST)
-		usleep(50);
+		usleep(42);
 	return (0);
 }
 
@@ -81,7 +81,7 @@ int	mcheck_sleep(unsigned int wait, t_philo *philo)
 	end.tv_usec = end.tv_usec % 1000000;
 	while (get_ms_dif(end) > 0)
 	{
-		usleep(50);
+		usleep(42);
 		pthread_mutex_lock(&(philo->live_lock));
 		if (philo->live != 1)
 			return (pthread_mutex_unlock(&(philo->live_lock)) - 1);
