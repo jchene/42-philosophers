@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/11 18:45:44 by jchene            #+#    #+#             */
-/*   Updated: 2022/04/12 18:02:25 by jchene           ###   ########.fr       */
+/*   Updated: 2022/04/14 15:25:38 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,5 +51,22 @@ void	print_state(t_philo *philo, unsigned int state)
 		ft_putstr("has died\n");
 	else if (state == TEST)
 		ft_putstr("is testing\n");
+	pthread_mutex_unlock(philo->print_lock);
+}
+
+unsigned int	get_fork_id(t_philo *philo, unsigned int fork)
+{
+	if (fork == LEFT)
+		return (philo->id);
+	else if (philo->id == 4)
+		return (1);
+	return (philo->id + 1);
+}
+
+void	prt_fork(t_philo *philo, unsigned int fork)
+{
+	pthread_mutex_lock(philo->print_lock);
+	printf("[%u] philo %u has taken a fork: fork %u\n",
+		get_ms_dif(philo->start_time), philo->id, get_fork_id(philo, fork));
 	pthread_mutex_unlock(philo->print_lock);
 }

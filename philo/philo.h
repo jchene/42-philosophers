@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 16:14:03 by jchene            #+#    #+#             */
-/*   Updated: 2022/04/12 18:29:01 by jchene           ###   ########.fr       */
+/*   Updated: 2022/04/14 15:16:18 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,9 @@
 # include <limits.h>
 # include <string.h>
 # include <sys/time.h>
+
+# define LEFT	1
+# define RIGHT	2
 
 # define PAST	0
 # define FUTURE	1
@@ -119,7 +122,8 @@ void			start_simul(t_env *env);
 //ROUTINE MUTEX
 void			try_lock(pthread_mutex_t *lock);
 void			set_eat_time(t_philo *philo);
-void			get_fork(t_philo *philo, unsigned int fork);
+void			get_first_fork(t_philo *philo);
+void			get_last_fork(t_philo *philo);
 void			drop_forks(t_philo *philo);
 void			set_var(pthread_mutex_t *lock, unsigned int *var,
 					unsigned int value);
@@ -128,6 +132,7 @@ void			set_var(pthread_mutex_t *lock, unsigned int *var,
 void			ft_putstr(char *str);
 void			ft_putnbr(unsigned int nb);
 void			print_state(t_philo *philo, unsigned int state);
+void			prt_fork(t_philo *philo, unsigned int fork);
 
 //TIME MANAGEMENT
 unsigned int	get_ms_dif(struct timeval s_time);
@@ -138,5 +143,7 @@ int				mcheck_sleep(unsigned int wait, t_philo *philo);
 void			*ft_calloc(size_t size);
 void			destroy_mutexes(t_env *env);
 void			free_all(t_env *env);
+
+t_philo			***philos(void);
 
 #endif

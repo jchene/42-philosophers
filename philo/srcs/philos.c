@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/05 16:23:39 by jchene            #+#    #+#             */
-/*   Updated: 2022/04/12 18:37:00 by jchene           ###   ########.fr       */
+/*   Updated: 2022/04/14 14:54:58 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,18 +48,16 @@ void	routine(t_philo *philo)
 	{
 		if (check_life(philo) == -1)
 			break ;
-		get_fork(philo, FIRST);
+		get_first_fork(philo);
 		if (check_fork_drop(philo, FIRST) == -1)
 			break ;
-		get_fork(philo, LAST);
-		if (check_fork_drop(philo, LAST) == -1)
-			break ;
+		get_last_fork(philo);
 		set_var(&(philo->eating_lock), &(philo->is_eating), 1);
 		print_state(philo, EAT);
 		msleep(philo->eat_time);
 		set_eat_time(philo);
-		drop_forks(philo);
 		set_var(&(philo->eating_lock), &(philo->is_eating), 0);
+		drop_forks(philo);
 		print_state(philo, SLEEP);
 		if (mcheck_sleep(philo->sleep_time, philo) == -1)
 			break ;
