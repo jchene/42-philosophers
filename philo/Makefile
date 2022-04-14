@@ -10,7 +10,7 @@ SRCS		=	./srcs/main.c\
 				./srcs/philos.c\
 				./srcs/mutex.c\
 				./srcs/time.c\
-				./srcs/print.c\
+				./srcs/forks.c\
 
 CC			=	gcc
 

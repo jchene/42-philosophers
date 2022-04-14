@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/05 16:16:24 by jchene            #+#    #+#             */
-/*   Updated: 2022/04/11 18:27:18 by jchene           ###   ########.fr       */
+/*   Updated: 2022/04/14 16:42:08 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ void	destroy_mutexes(t_env *env)
 	unsigned int	i;
 
 	i = 0;
-	pthread_mutex_destroy(&(env->start_lock));
+	pthread_mutex_destroy(&(env->start_lock1));
+	pthread_mutex_destroy(&(env->start_lock2));
 	pthread_mutex_destroy(&(env->print_lock));
 	while (i < env->nb_philo)
 	{

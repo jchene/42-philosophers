@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 16:14:03 by jchene            #+#    #+#             */
-/*   Updated: 2022/04/14 15:16:18 by jchene           ###   ########.fr       */
+/*   Updated: 2022/04/14 17:11:32 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ typedef struct s_philosophers
 	unsigned int	sleep_time;
 	int				max_meal;
 
-	unsigned int	nb_meal;
+	int				nb_meal;
 	struct timeval	start_time;
 
 	unsigned int	id;
@@ -93,7 +93,8 @@ typedef struct s_environment
 	t_philo			**philos;
 	t_reaper		reaper;
 
-	pthread_mutex_t	start_lock;
+	pthread_mutex_t	start_lock1;
+	pthread_mutex_t	start_lock2;
 	pthread_mutex_t	print_lock;
 }				t_env;
 
@@ -119,20 +120,20 @@ void			routine(t_philo *philo);
 void			reaper_routine(t_reaper *reaper_data);
 void			start_simul(t_env *env);
 
-//ROUTINE MUTEX
-void			try_lock(pthread_mutex_t *lock);
-void			set_eat_time(t_philo *philo);
+//EATING MUTEX
 void			get_first_fork(t_philo *philo);
 void			get_last_fork(t_philo *philo);
 void			drop_forks(t_philo *philo);
+void			get_eat_locks(t_philo *philo);
+void			drop_eat_locks(t_philo *philo);
+
+//ROUTINE MUTEX
+void			try_lock(pthread_mutex_t *lock);
+void			set_eat_time(t_philo *philo);
+void			kill_all(t_reaper *reaper);
+void			join_all(t_reaper *reaper);
 void			set_var(pthread_mutex_t *lock, unsigned int *var,
 					unsigned int value);
-
-//PRINTING
-void			ft_putstr(char *str);
-void			ft_putnbr(unsigned int nb);
-void			print_state(t_philo *philo, unsigned int state);
-void			prt_fork(t_philo *philo, unsigned int fork);
 
 //TIME MANAGEMENT
 unsigned int	get_ms_dif(struct timeval s_time);
@@ -144,6 +145,7 @@ void			*ft_calloc(size_t size);
 void			destroy_mutexes(t_env *env);
 void			free_all(t_env *env);
 
-t_philo			***philos(void);
+//PRINTING
+void			print_state(t_philo *philo, const char *str);
 
 #endif

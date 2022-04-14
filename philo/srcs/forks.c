@@ -6,13 +6,13 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/14 15:29:57 by jchene            #+#    #+#             */
-/*   Updated: 2022/04/14 15:30:56 by jchene           ###   ########.fr       */
+/*   Updated: 2022/04/14 17:06:14 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-void	get_first_fork(t_philo *philo)
+/*void	get_first_fork(t_philo *philo)
 {	
 	if ((philo->id % 2))
 		prt_fork(philo, pthread_mutex_lock(&(philo->left_fork)) + LEFT);
@@ -26,9 +26,9 @@ void	get_last_fork(t_philo *philo)
 		prt_fork(philo, pthread_mutex_lock(philo->right_fork) + RIGHT);
 	else
 		prt_fork(philo, pthread_mutex_lock(&(philo->left_fork)) + LEFT);
-}
+}*/
 
-void	drop_forks(t_philo *philo)
+/*void	drop_forks(t_philo *philo)
 {
 	if (philo->id % 2)
 	{
@@ -40,4 +40,34 @@ void	drop_forks(t_philo *philo)
 		pthread_mutex_unlock(&(philo->left_fork));
 		pthread_mutex_unlock(philo->right_fork);
 	}
+}*/
+
+void	get_first_fork(t_philo *philo)
+{	
+	pthread_mutex_lock(&(philo->left_fork));
+	print_state(philo, "has taken a fork");
+}
+
+void	get_last_fork(t_philo *philo)
+{	
+	pthread_mutex_lock(philo->right_fork);
+	print_state(philo, "has taken a fork");
+}
+
+void	drop_forks(t_philo *philo)
+{
+	pthread_mutex_unlock(&(philo->left_fork));
+	pthread_mutex_unlock(philo->right_fork);
+}
+
+void	get_eat_locks(t_philo *philo)
+{
+	pthread_mutex_lock(&(philo->eat_lock));
+	pthread_mutex_lock(&(philo->eating_lock));
+}
+
+void	drop_eat_locks(t_philo *philo)
+{
+	pthread_mutex_unlock(&(philo->eat_lock));
+	pthread_mutex_unlock(&(philo->eating_lock));
 }
