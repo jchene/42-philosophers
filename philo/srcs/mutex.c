@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 17:54:57 by jchene            #+#    #+#             */
-/*   Updated: 2022/04/15 15:50:40 by jchene           ###   ########.fr       */
+/*   Updated: 2022/04/15 23:36:11 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,11 +49,4 @@ void	join_all(t_reaper *reaper)
 		pthread_join(reaper->philos[i]->thread, NULL);
 		i++;
 	}
-}
-
-void	print_state(t_philo *philo, const char *str)
-{
-	pthread_mutex_lock(philo->print_lock);
-	printf("[%u] philo %u %s\n", get_ms_dif(philo->start_time), philo->id, str);
-	pthread_mutex_unlock(philo->print_lock);
 }

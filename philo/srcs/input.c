@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 14:40:46 by jchene            #+#    #+#             */
-/*   Updated: 2022/04/09 20:05:49 by jchene           ###   ########.fr       */
+/*   Updated: 2022/04/15 23:24:25 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,5 +50,12 @@ int	get_input(int argc, char **argv, t_env *env)
 		env->max_meal = ft_atou(argv[5]);
 	else
 		env->max_meal = -1;
+	return (0);
+}
+
+unsigned int	solo_philo(t_philo *philo)
+{
+	if (&(philo->left_fork) == philo->right_fork)
+		return (1);
 	return (0);
 }

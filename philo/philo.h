@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 16:14:03 by jchene            #+#    #+#             */
-/*   Updated: 2022/04/15 17:12:01 by jchene           ###   ########.fr       */
+/*   Updated: 2022/04/15 23:36:45 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,12 +97,13 @@ unsigned int	ft_atou(char *str);
 int				check_charset(char *argv, const char *charset);
 int				check_input(int argc, char **argv);
 int				get_input(int argc, char **argv, t_env *env);
+unsigned int	solo_philo(t_philo *philo);
 
 //CORE CODE
 unsigned int	check_life(t_philo *philo);
 unsigned int	check_others(t_philo *philo);
-void			*routine(void *philo);
-void			*reaper_routine(void *reaper_data);
+void			*routine(t_philo *philo);
+void			*reaper_routine(t_reaper *rp);
 void			start_simul(t_env *env);
 
 //SIMULATION
@@ -123,8 +124,6 @@ void			try_lock(pthread_mutex_t *lock);
 void			kill_all(t_reaper *reaper);
 void			kill_philo(t_philo *philo);
 void			join_all(t_reaper *reaper);
-unsigned int	check_life(t_philo *philo);
-unsigned int	solo_philo(t_philo *philo);
 
 //TIME MANAGEMENT
 unsigned int	get_ms_dif(struct timeval s_time);
@@ -139,6 +138,7 @@ void			free_all(t_env *env);
 void			set_last_eat(t_philo *philo);
 unsigned int	get_nb_meal(t_philo *philo);
 unsigned int	check_done(t_reaper *reaper);
+int				fork_routine(t_philo *philo);
 
 //PRINTING
 void			print_state(t_philo *philo, const char *str);

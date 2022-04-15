@@ -6,17 +6,17 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 16:14:52 by jchene            #+#    #+#             */
-/*   Updated: 2022/04/15 16:42:41 by jchene           ###   ########.fr       */
+/*   Updated: 2022/04/15 23:24:31 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-unsigned int	solo_philo(t_philo *philo)
+void	print_state(t_philo *philo, const char *str)
 {
-	if (&(philo->left_fork) == philo->right_fork)
-		return (1);
-	return (0);
+	pthread_mutex_lock(philo->print_lock);
+	printf("[%u] philo %u %s\n", get_ms_dif(philo->start_time), philo->id, str);
+	pthread_mutex_unlock(philo->print_lock);
 }
 
 int	main(int argc, char **argv)
