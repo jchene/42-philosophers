@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 16:14:03 by jchene            #+#    #+#             */
-/*   Updated: 2022/04/15 15:51:10 by jchene           ###   ########.fr       */
+/*   Updated: 2022/04/15 17:12:01 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,21 +22,10 @@
 # include <string.h>
 # include <sys/time.h>
 
-# define LEFT	1
-# define RIGHT	2
-
 # define PAST	0
 # define FUTURE	1
 
-# define FIRST	1
-# define LAST	2
-
-# define FORK	1
-# define EAT	2
-# define SLEEP	3
-# define THINK	4
-# define DIE	5
-# define TEST	6
+# define SLEEP	1000
 
 //PHILOSOPHERS
 typedef struct s_philosophers
@@ -112,8 +101,8 @@ int				get_input(int argc, char **argv, t_env *env);
 //CORE CODE
 unsigned int	check_life(t_philo *philo);
 unsigned int	check_others(t_philo *philo);
-void			routine(t_philo *philo);
-void			reaper_routine(t_reaper *reaper_data);
+void			*routine(void *philo);
+void			*reaper_routine(void *reaper_data);
 void			start_simul(t_env *env);
 
 //SIMULATION

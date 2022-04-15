@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/05 16:23:39 by jchene            #+#    #+#             */
-/*   Updated: 2022/04/15 15:57:16 by jchene           ###   ########.fr       */
+/*   Updated: 2022/04/15 17:14:13 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,11 @@ unsigned int	check_others(t_philo *philo)
 	return (philo->all_alive + pthread_mutex_unlock(&(philo->live_lock)));
 }
 
-void	routine(t_philo *philo)
+void	*routine(void *ph)
 {
+	t_philo	*philo;
+
+	philo = (t_philo *)ph;
 	try_lock(philo->start_lock);
 	while (check_life(philo) && check_others(philo))
 	{
@@ -45,14 +48,20 @@ void	routine(t_philo *philo)
 		if (!mcheck_sleep(philo->sleep_time, philo, 0))
 			break ;
 		print_state(philo, "is thinking");
-		usleep(42);
+		usleep(SLEEP);
+		pthread_mutex_lock(&(philo->eat_lock));
 		philo->nb_meal++;
+		pthread_mutex_unlock(&(philo->eat_lock));
 	}
 	pthread_exit(NULL);
+	return (NULL);
 }
 
-void	reaper_routine(t_reaper *rp)
+void	*reaper_routine(void *reaper)
 {
+	t_reaper	*rp;
+
+	rp = (t_reaper *)reaper;
 	try_lock(rp->start_lock);
 	while (1)
 	{
@@ -72,12 +81,13 @@ void	reaper_routine(t_reaper *rp)
 			break ;
 		}
 		pthread_mutex_unlock(&(rp->philos[rp->loc_id]->eat_lock));
-		usleep(42);
+		usleep(SLEEP);
 		rp->loc_id++;
 	}
-	join_all(rp);
-	print_state(rp->philos[rp->dead_id - 1], "died");
+	if (rp->done_eating < rp->nb_philo)
+		print_state(rp->philos[(rp->dead_id - 1) % rp->nb_philo], "died");
 	pthread_exit(NULL);
+	return (NULL);
 }
 
 void	start_simul(t_env *env)
@@ -91,16 +101,16 @@ void	start_simul(t_env *env)
 	while (i < env->nb_philo)
 	{
 		init_philo(env, env->philos[i], i);
-		pthread_create(&(env->philos[i]->thread), NULL, (void *)routine,
-			(void *)env->philos[i]);
+		pthread_create(&(env->philos[i]->thread), NULL, routine,
+			env->philos[i]);
 		i++;
 	}
 	link_forks(env);
 	init_reaper(env, &(env->reaper));
-	pthread_create(&(env->reaper.thread), NULL, (void *)reaper_routine,
-		(void *)&(env->reaper));
+	pthread_create(&(env->reaper.thread), NULL, reaper_routine, &(env->reaper));
 	pthread_mutex_unlock(&(env->start_lock1));
-	usleep(42);
+	usleep(SLEEP);
 	pthread_mutex_unlock(&(env->start_lock2));
 	pthread_join(env->reaper.thread, NULL);
+	join_all(&env->reaper);
 }

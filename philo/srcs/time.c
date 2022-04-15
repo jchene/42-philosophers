@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/08 14:40:10 by jchene            #+#    #+#             */
-/*   Updated: 2022/04/15 15:40:04 by jchene           ###   ########.fr       */
+/*   Updated: 2022/04/15 16:20:08 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ int	mcheck_sleep(unsigned int wait, t_philo *philo, unsigned int forks)
 	end.tv_usec = end.tv_usec % 1000000;
 	while (get_tempo(end) == FUTURE)
 	{
-		usleep(42);
+		usleep(SLEEP);
 		if (check_fork_drop(philo, forks))
 			return (0);
 	}
