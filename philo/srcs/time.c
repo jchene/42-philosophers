@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/08 14:40:10 by jchene            #+#    #+#             */
-/*   Updated: 2022/04/15 14:44:15 by jchene           ###   ########.fr       */
+/*   Updated: 2022/04/15 15:40:04 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ unsigned int	get_ms_dif(struct timeval s_time)
 	return (dif / 1000);
 }
 
-int	mcheck_sleep(unsigned int wait, t_philo *philo)
+int	mcheck_sleep(unsigned int wait, t_philo *philo, unsigned int forks)
 {
 	struct timeval	stamp;
 	struct timeval	end;
@@ -62,7 +62,7 @@ int	mcheck_sleep(unsigned int wait, t_philo *philo)
 	while (get_tempo(end) == FUTURE)
 	{
 		usleep(42);
-		if (!check_life(philo) || !check_others(philo))
+		if (check_fork_drop(philo, forks))
 			return (0);
 	}
 	return (1);

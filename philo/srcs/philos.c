@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/05 16:23:39 by jchene            #+#    #+#             */
-/*   Updated: 2022/04/15 14:30:18 by jchene           ###   ########.fr       */
+/*   Updated: 2022/04/15 15:57:16 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,19 +37,17 @@ void	routine(t_philo *philo)
 			break ;
 		set_last_eat(philo);
 		print_state(philo, "is eating");
-		if (!mcheck_sleep(philo->eat_time, philo))
+		if (!mcheck_sleep(philo->eat_time, philo, 2))
 			break ;
 		set_last_eat(philo);
 		drop_forks(philo);
 		print_state(philo, "is sleeping");
-		if (!mcheck_sleep(philo->sleep_time, philo))
+		if (!mcheck_sleep(philo->sleep_time, philo, 0))
 			break ;
 		print_state(philo, "is thinking");
 		usleep(42);
 		philo->nb_meal++;
 	}
-	if (!check_life(philo))
-		print_state(philo, "died");
 	pthread_exit(NULL);
 }
 
@@ -68,9 +66,8 @@ void	reaper_routine(t_reaper *rp)
 		if ((get_ms_dif(rp->philos[rp->loc_id]->last_eat)) > rp->death_time)
 		{
 			pthread_mutex_unlock(&(rp->philos[rp->loc_id]->eat_lock));
-			pthread_mutex_lock(&(rp->philos[rp->loc_id]->live_lock));
-			rp->philos[rp->loc_id]->live = 0;
-			pthread_mutex_unlock(&(rp->philos[rp->loc_id]->live_lock));
+			kill_philo(rp->philos[rp->loc_id]);
+			rp->dead_id = rp->philos[rp->loc_id]->id;
 			kill_all(rp);
 			break ;
 		}
@@ -79,6 +76,7 @@ void	reaper_routine(t_reaper *rp)
 		rp->loc_id++;
 	}
 	join_all(rp);
+	print_state(rp->philos[rp->dead_id - 1], "died");
 	pthread_exit(NULL);
 }
 

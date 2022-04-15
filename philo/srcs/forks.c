@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/14 15:29:57 by jchene            #+#    #+#             */
-/*   Updated: 2022/04/15 13:33:22 by jchene           ###   ########.fr       */
+/*   Updated: 2022/04/15 15:46:29 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,14 @@ void	drop_forks(t_philo *philo)
 
 int	check_fork_drop(t_philo *philo, unsigned int nb_forks)
 {
+	if (solo_philo(philo))
+	{
+		pthread_mutex_lock(&(philo->live_lock));
+		philo->live = 0;
+		pthread_mutex_unlock(&(philo->live_lock));
+		drop_first_fork(philo);
+		return (-1);
+	}
 	if (!check_life(philo) || !check_others(philo))
 	{
 		if (nb_forks == 1)
@@ -63,6 +71,6 @@ int	check_fork_drop(t_philo *philo, unsigned int nb_forks)
 		else if (nb_forks == 2)
 			drop_forks(philo);
 		return (-1);
-	}	
+	}
 	return (0);
 }

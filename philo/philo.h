@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 16:14:03 by jchene            #+#    #+#             */
-/*   Updated: 2022/04/15 14:13:12 by jchene           ###   ########.fr       */
+/*   Updated: 2022/04/15 15:51:10 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ typedef struct s_reaper
 	unsigned int	loc_id;
 	unsigned int	nb_philo;
 	int				max_meal;
+	unsigned int	dead_id;
 	unsigned int	death_time;
 	unsigned int	done_eating;
 
@@ -131,13 +132,14 @@ int				check_fork_drop(t_philo *philo, unsigned int nb_forks);
 //ROUTINE MUTEX
 void			try_lock(pthread_mutex_t *lock);
 void			kill_all(t_reaper *reaper);
+void			kill_philo(t_philo *philo);
 void			join_all(t_reaper *reaper);
 unsigned int	check_life(t_philo *philo);
+unsigned int	solo_philo(t_philo *philo);
 
 //TIME MANAGEMENT
 unsigned int	get_ms_dif(struct timeval s_time);
-int				msleep(unsigned int wait);
-int				mcheck_sleep(unsigned int wait, t_philo *philo);
+int				mcheck_sleep(unsigned int wait, t_philo *philo, unsigned int f);
 
 //MEMORY MANAGEMENT
 void			*ft_calloc(size_t size);

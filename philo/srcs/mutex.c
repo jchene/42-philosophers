@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 17:54:57 by jchene            #+#    #+#             */
-/*   Updated: 2022/04/15 14:30:17 by jchene           ###   ########.fr       */
+/*   Updated: 2022/04/15 15:50:40 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,13 @@ void	kill_all(t_reaper *reaper)
 		pthread_mutex_unlock(&(reaper->philos[j]->live_lock));
 		j++;
 	}
+}
+
+void	kill_philo(t_philo *philo)
+{
+	pthread_mutex_lock(&(philo->live_lock));
+	philo->live = 0;
+	pthread_mutex_unlock(&(philo->live_lock));
 }
 
 void	join_all(t_reaper *reaper)

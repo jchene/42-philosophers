@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/08 15:05:40 by jchene            #+#    #+#             */
-/*   Updated: 2022/04/15 14:13:21 by jchene           ###   ########.fr       */
+/*   Updated: 2022/04/15 15:44:29 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,4 +69,5 @@ void	init_reaper(t_env *env, t_reaper *reaper)
 	reaper->philos = env->philos;
 	reaper->start_lock = &(env->start_lock1);
 	reaper->done_eating = 0;
+	reaper->dead_id = 0;
 }
