@@ -6,18 +6,11 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 16:14:52 by jchene            #+#    #+#             */
-/*   Updated: 2022/04/14 17:09:07 by jchene           ###   ########.fr       */
+/*   Updated: 2022/04/15 13:11:21 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
-
-void	print_state(t_philo *philo, const char *str)
-{
-	pthread_mutex_lock(philo->print_lock);
-	printf("[%u] philo %u %s\n", get_ms_dif(philo->start_time), philo->id, str);
-	pthread_mutex_unlock(philo->print_lock);
-}
 
 int	main(int argc, char **argv)
 {

@@ -6,93 +6,79 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/05 16:23:39 by jchene            #+#    #+#             */
-/*   Updated: 2022/04/14 18:02:02 by jchene           ###   ########.fr       */
+/*   Updated: 2022/04/15 14:30:18 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-int	check_life(t_philo *philo)
+unsigned int	check_life(t_philo *philo)
 {
 	pthread_mutex_lock(&(philo->live_lock));
-	if (philo->live != 1)
-		return (pthread_mutex_unlock(&(philo->live_lock)) - 1);
-	return (pthread_mutex_unlock(&(philo->live_lock)));
+	return (philo->live + pthread_mutex_unlock(&(philo->live_lock)));
 }
 
-int	check_fork_drop(t_philo *philo, unsigned int fork)
+unsigned int	check_others(t_philo *philo)
 {
 	pthread_mutex_lock(&(philo->live_lock));
-	if (philo->live != 1)
-	{
-		if (fork == FIRST)
-		{
-			if (philo->id % 2)
-				pthread_mutex_unlock(&(philo->left_fork));
-			else
-				pthread_mutex_unlock(philo->right_fork);
-		}
-		else
-			drop_forks(philo);
-		return (-1);
-	}
-	pthread_mutex_unlock(&(philo->live_lock));
-	return (0);
+	return (philo->all_alive + pthread_mutex_unlock(&(philo->live_lock)));
 }
 
 void	routine(t_philo *philo)
 {
 	try_lock(philo->start_lock);
-	while ((philo->max_meal < 0) || (philo->nb_meal < philo->max_meal))
+	while (check_life(philo) && check_others(philo))
 	{
-		if (check_life(philo) == -1)
-			break ;
 		get_first_fork(philo);
-		if (check_fork_drop(philo, FIRST) == -1)
+		if (check_fork_drop(philo, 1) == -1)
 			break ;
 		get_last_fork(philo);
-		set_var(&(philo->eating_lock), &(philo->is_eating), 1);
-		set_eat_time(philo);
+		if (check_fork_drop(philo, 2) == -1)
+			break ;
+		set_last_eat(philo);
 		print_state(philo, "is eating");
-		msleep(philo->eat_time);
-		set_var(&(philo->eating_lock), &(philo->is_eating), 0);
+		if (!mcheck_sleep(philo->eat_time, philo))
+			break ;
+		set_last_eat(philo);
 		drop_forks(philo);
 		print_state(philo, "is sleeping");
-		if (mcheck_sleep(philo->sleep_time, philo) == -1)
+		if (!mcheck_sleep(philo->sleep_time, philo))
 			break ;
 		print_state(philo, "is thinking");
 		usleep(42);
 		philo->nb_meal++;
 	}
-	if (philo->nb_meal != philo->max_meal)
-		print_state(philo, "has died");
+	if (!check_life(philo))
+		print_state(philo, "died");
 	pthread_exit(NULL);
 }
 
-void	reaper_routine(t_reaper *reaper)
+void	reaper_routine(t_reaper *rp)
 {
-	unsigned int	i;
-
-	i = 0;
-	try_lock(reaper->start_lock);
+	try_lock(rp->start_lock);
 	while (1)
 	{
-		i = i % reaper->nb_philo;
-		get_eat_locks(reaper->philos[i]);
-		if (((get_ms_dif(reaper->philos[i]->last_eat)) > reaper->death_time)
-			&& (reaper->philos[i]->is_eating == 0))
+		rp->loc_id = rp->loc_id % rp->nb_philo;
+		if ((rp->max_meal > 0) && ((int)get_nb_meal(rp->philos[rp->loc_id])
+				>= rp->max_meal))
+			rp->done_eating++;
+		if (check_done(rp))
+			break ;
+		pthread_mutex_lock(&(rp->philos[rp->loc_id]->eat_lock));
+		if ((get_ms_dif(rp->philos[rp->loc_id]->last_eat)) > rp->death_time)
 		{
-			drop_eat_locks(reaper->philos[i]);
-			reaper->dead_id = reaper->philos[i]->id;
-			kill_all(reaper);
+			pthread_mutex_unlock(&(rp->philos[rp->loc_id]->eat_lock));
+			pthread_mutex_lock(&(rp->philos[rp->loc_id]->live_lock));
+			rp->philos[rp->loc_id]->live = 0;
+			pthread_mutex_unlock(&(rp->philos[rp->loc_id]->live_lock));
+			kill_all(rp);
 			break ;
 		}
-		else
-			drop_eat_locks(reaper->philos[i]);
+		pthread_mutex_unlock(&(rp->philos[rp->loc_id]->eat_lock));
 		usleep(42);
-		i++;
+		rp->loc_id++;
 	}
-	join_all(reaper);
+	join_all(rp);
 	pthread_exit(NULL);
 }
 

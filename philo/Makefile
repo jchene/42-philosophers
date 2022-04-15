@@ -11,6 +11,7 @@ SRCS		=	./srcs/main.c\
 				./srcs/mutex.c\
 				./srcs/time.c\
 				./srcs/forks.c\
+				./srcs/eat.c\
 
 CC			=	gcc
 

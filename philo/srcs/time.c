@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/08 14:40:10 by jchene            #+#    #+#             */
-/*   Updated: 2022/04/14 18:05:06 by jchene           ###   ########.fr       */
+/*   Updated: 2022/04/15 14:44:15 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ unsigned int	get_tempo(struct timeval s_time)
 		return (PAST);
 }
 
-unsigned int	get_us_dif(struct timeval s_time)
+unsigned int	get_ms_dif(struct timeval s_time)
 {
 	struct timeval	*future;
 	struct timeval	*past;
@@ -46,27 +46,7 @@ unsigned int	get_us_dif(struct timeval s_time)
 	dif = future->tv_sec - past->tv_sec;
 	dif = dif * 1000000;
 	dif = (dif - past->tv_usec) + future->tv_usec;
-	return (dif);
-}
-
-unsigned int	get_ms_dif(struct timeval s_time)
-{
-	return (get_us_dif(s_time) / 1000);
-}
-
-int	msleep(unsigned int wait)
-{
-	struct timeval	stamp;
-	struct timeval	end;
-
-	gettimeofday(&stamp, NULL);
-	end.tv_sec = stamp.tv_sec + (wait / 1000);
-	end.tv_usec = stamp.tv_usec + ((wait % 1000) * 1000);
-	end.tv_sec = end.tv_sec + (end.tv_usec / 1000000);
-	end.tv_usec = end.tv_usec % 1000000;
-	while (get_tempo(end) != PAST)
-		usleep(42);
-	return (0);
+	return (dif / 1000);
 }
 
 int	mcheck_sleep(unsigned int wait, t_philo *philo)
@@ -79,13 +59,11 @@ int	mcheck_sleep(unsigned int wait, t_philo *philo)
 	end.tv_usec = stamp.tv_usec + ((wait % 1000) * 1000);
 	end.tv_sec = end.tv_sec + (end.tv_usec / 1000000);
 	end.tv_usec = end.tv_usec % 1000000;
-	while (get_ms_dif(end) > 0)
+	while (get_tempo(end) == FUTURE)
 	{
 		usleep(42);
-		pthread_mutex_lock(&(philo->live_lock));
-		if (philo->live != 1)
-			return (pthread_mutex_unlock(&(philo->live_lock)) - 1);
-		pthread_mutex_unlock(&(philo->live_lock));
+		if (!check_life(philo) || !check_others(philo))
+			return (0);
 	}
-	return (0);
+	return (1);
 }

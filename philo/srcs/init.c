@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/08 15:05:40 by jchene            #+#    #+#             */
-/*   Updated: 2022/04/14 16:38:58 by jchene           ###   ########.fr       */
+/*   Updated: 2022/04/15 14:13:21 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,10 @@ void	init_philo(t_env *env, t_philo *philo, unsigned int i)
 	philo->nb_meal = 0;
 	philo->start_time = env->start_time;
 	philo->id = i + 1;
-	philo->is_eating = 0;
-	pthread_mutex_init(&(philo->eating_lock), NULL);
 	philo->last_eat = philo->start_time;
 	pthread_mutex_init(&(philo->eat_lock), NULL);
 	philo->live = 1;
+	philo->all_alive = 1;
 	pthread_mutex_init(&(philo->live_lock), NULL);
 	pthread_mutex_init(&(philo->left_fork), NULL);
 	philo->print_lock = &(env->print_lock);
@@ -63,9 +62,11 @@ void	link_forks(t_env *env)
 
 void	init_reaper(t_env *env, t_reaper *reaper)
 {
+	reaper->loc_id = 0;
 	reaper->nb_philo = env->nb_philo;
+	reaper->max_meal = env->max_meal;
 	reaper->death_time = env->death_time;
 	reaper->philos = env->philos;
 	reaper->start_lock = &(env->start_lock1);
-	reaper->dead_id = 0;
+	reaper->done_eating = 0;
 }
