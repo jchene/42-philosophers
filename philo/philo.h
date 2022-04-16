@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 16:14:03 by jchene            #+#    #+#             */
-/*   Updated: 2022/04/15 23:36:45 by jchene           ###   ########.fr       */
+/*   Updated: 2022/04/16 15:03:35 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,7 @@ int				check_fork_drop(t_philo *philo, unsigned int nb_forks);
 void			try_lock(pthread_mutex_t *lock);
 void			kill_all(t_reaper *reaper);
 void			kill_philo(t_philo *philo);
+void			execute(t_reaper *reaper);
 void			join_all(t_reaper *reaper);
 
 //TIME MANAGEMENT
