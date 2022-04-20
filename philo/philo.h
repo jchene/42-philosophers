@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 16:14:03 by jchene            #+#    #+#             */
-/*   Updated: 2022/04/16 15:03:35 by jchene           ###   ########.fr       */
+/*   Updated: 2022/04/20 17:08:07 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 # define PAST	0
 # define FUTURE	1
 
-# define SLEEP	1000
+# define SLEEP	500
 
 //PHILOSOPHERS
 typedef struct s_philosophers

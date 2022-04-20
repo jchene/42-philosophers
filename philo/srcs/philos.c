@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/05 16:23:39 by jchene            #+#    #+#             */
-/*   Updated: 2022/04/16 16:58:13 by jchene           ###   ########.fr       */
+/*   Updated: 2022/04/20 17:07:19 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ void	*routine(t_philo *philo)
 		if (!mcheck_sleep(philo->sleep_time, philo, 0))
 			break ;
 		print_state(philo, "is thinking");
+		usleep(42);
 		pthread_mutex_lock(&(philo->eat_lock));
 		philo->nb_meal++;
 		pthread_mutex_unlock(&(philo->eat_lock));
