@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/05 16:23:39 by jchene            #+#    #+#             */
-/*   Updated: 2022/04/20 17:07:19 by jchene           ###   ########.fr       */
+/*   Updated: 2022/04/21 15:18:53 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,6 @@ void	*routine(t_philo *philo)
 		if (check_fork_drop(philo, 1) == -1)
 			break ;
 		get_last_fork(philo);
-		if (check_fork_drop(philo, 2) == -1)
-			break ;
 		set_last_eat(philo);
 		print_state(philo, "is eating");
 		if (!mcheck_sleep(philo->eat_time, philo, 2))
@@ -44,7 +42,6 @@ void	*routine(t_philo *philo)
 		if (!mcheck_sleep(philo->sleep_time, philo, 0))
 			break ;
 		print_state(philo, "is thinking");
-		usleep(42);
 		pthread_mutex_lock(&(philo->eat_lock));
 		philo->nb_meal++;
 		pthread_mutex_unlock(&(philo->eat_lock));
