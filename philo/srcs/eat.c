@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/15 13:48:26 by jchene            #+#    #+#             */
-/*   Updated: 2022/04/15 23:35:04 by jchene           ###   ########.fr       */
+/*   Updated: 2022/04/23 14:50:19 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,18 +19,18 @@ void	set_last_eat(t_philo *philo)
 	pthread_mutex_unlock(&(philo->eat_lock));
 }
 
-unsigned int	get_nb_meal(t_philo *philo)
+unsigned int	check_all_done(t_reaper *rp)
 {
-	pthread_mutex_lock(&(philo->eat_lock));
-	return (philo->nb_meal + pthread_mutex_unlock(&(philo->eat_lock)));
-}
+	unsigned int	i;
 
-unsigned int	check_done(t_reaper *reaper)
-{
-	if (reaper->done_eating >= reaper->nb_philo)
+	if (rp->max_meal < 0)
+		return (0);
+	i = 0;
+	while (i < rp->nb_philo)
 	{
-		kill_all(reaper);
-		return (1);
+		if (rp->philos[i]->nb_meal < rp->max_meal)
+			return (0);
+		i++;
 	}
-	return (0);
+	return (1);
 }

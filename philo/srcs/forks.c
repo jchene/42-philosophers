@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/14 15:29:57 by jchene            #+#    #+#             */
-/*   Updated: 2022/04/15 15:46:29 by jchene           ###   ########.fr       */
+/*   Updated: 2022/04/23 18:13:48 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,29 +15,19 @@
 void	get_first_fork(t_philo *philo)
 {	
 	if ((philo->id % 2))
-	{
 		pthread_mutex_lock(&(philo->left_fork));
-		print_state(philo, "has taken a fork");
-	}
 	else
-	{
 		pthread_mutex_lock(philo->right_fork);
-		print_state(philo, "has taken a fork");
-	}
+	print_state(philo, "has taken a fork");
 }
 
 void	get_last_fork(t_philo *philo)
 {	
 	if ((philo->id % 2))
-	{
 		pthread_mutex_lock(philo->right_fork);
-		print_state(philo, "has taken a fork");
-	}
 	else
-	{
 		pthread_mutex_lock(&(philo->left_fork));
-		print_state(philo, "has taken a fork");
-	}
+	print_state(philo, "has taken a fork");
 }
 
 void	drop_first_fork(t_philo *philo)
@@ -54,22 +44,20 @@ void	drop_forks(t_philo *philo)
 	pthread_mutex_unlock(philo->right_fork);
 }
 
-int	check_fork_drop(t_philo *philo, unsigned int nb_forks)
+int	check_fork_drop(t_philo *philo, unsigned int forks)
 {
-	if (solo_philo(philo))
+	if (!philo->live || !philo->all_alive)
 	{
-		pthread_mutex_lock(&(philo->live_lock));
-		philo->live = 0;
-		pthread_mutex_unlock(&(philo->live_lock));
-		drop_first_fork(philo);
+		if (forks == 1)
+			drop_first_fork(philo);
+		else if (forks == 2)
+			drop_forks(philo);
 		return (-1);
 	}
-	if (!check_life(philo) || !check_others(philo))
+	else if (&(philo->left_fork) == philo->right_fork)
 	{
-		if (nb_forks == 1)
-			drop_first_fork(philo);
-		else if (nb_forks == 2)
-			drop_forks(philo);
+		philo->live = 0;
+		drop_first_fork(philo);
 		return (-1);
 	}
 	return (0);

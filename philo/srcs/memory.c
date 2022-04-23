@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/05 16:16:24 by jchene            #+#    #+#             */
-/*   Updated: 2022/04/14 16:42:08 by jchene           ###   ########.fr       */
+/*   Updated: 2022/04/23 14:47:11 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ void	destroy_mutexes(t_env *env)
 	while (i < env->nb_philo)
 	{
 		pthread_mutex_destroy(&(env->philos[i]->eat_lock));
-		pthread_mutex_destroy(&(env->philos[i]->live_lock));
 		pthread_mutex_destroy(&(env->philos[i]->left_fork));
 		i++;
 	}
@@ -40,9 +39,6 @@ void	free_all(t_env *env)
 
 	i = 0;
 	while (i < env->nb_philo)
-	{
-		free(env->philos[i]);
-		i++;
-	}
+		free(env->philos[i++]);
 	free(env->philos);
 }

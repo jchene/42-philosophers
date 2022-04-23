@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/08 14:40:10 by jchene            #+#    #+#             */
-/*   Updated: 2022/04/21 15:28:11 by jchene           ###   ########.fr       */
+/*   Updated: 2022/04/23 14:47:33 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,9 +61,25 @@ int	mcheck_sleep(unsigned int wait, t_philo *philo, unsigned int forks)
 	end.tv_usec = end.tv_usec % 1000000;
 	while (get_tempo(end) == FUTURE)
 	{
-		usleep(100);
-		if (check_fork_drop(philo, forks))
+		if (!philo->live || !philo->all_alive)
+		{
+			if (forks == 2)
+				drop_forks(philo);
 			return (0);
+		}
+		usleep(42);
 	}
 	return (1);
+}
+
+unsigned int	check_death_time(t_reaper *rp)
+{
+	struct timeval	last_eat;
+
+	pthread_mutex_lock(&(rp->philos[rp->loc_id]->eat_lock));
+	last_eat = rp->philos[rp->loc_id]->last_eat;
+	pthread_mutex_unlock(&(rp->philos[rp->loc_id]->eat_lock));
+	if ((get_ms_dif(last_eat) > rp->death_time))
+		return (1);
+	return (0);
 }

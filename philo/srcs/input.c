@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 14:40:46 by jchene            #+#    #+#             */
-/*   Updated: 2022/04/15 23:24:25 by jchene           ###   ########.fr       */
+/*   Updated: 2022/04/23 18:17:08 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,16 +46,11 @@ int	get_input(int argc, char **argv, t_env *env)
 	env->death_time = ft_atou(argv[2]);
 	env->eat_time = ft_atou(argv[3]);
 	env->sleep_time = ft_atou(argv[4]);
+	if (env->nb_philo == 0)
+		return (-1);
 	if (argc == 6)
 		env->max_meal = ft_atou(argv[5]);
 	else
 		env->max_meal = -1;
-	return (0);
-}
-
-unsigned int	solo_philo(t_philo *philo)
-{
-	if (&(philo->left_fork) == philo->right_fork)
-		return (1);
 	return (0);
 }

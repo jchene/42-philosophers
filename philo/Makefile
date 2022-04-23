@@ -17,9 +17,11 @@ CC			=	gcc
 
 CFLAGS		=	-Werror -Wextra -Wall
 
-PHILO_FLAGS	=	-lpthread
+LIBRARIES	=	-lpthread
 
-SANFLAGS	=	-g -fsanitize=address
+LSANF		=	-g -fsanitize=address
+
+TSANF		=	-g -fsanitize=thread
 
 DEL			=	rm -f
 
@@ -31,10 +33,16 @@ all:			$(NAME)
 				$(CC) $(CFLAGS) -o $@ -c $<
 
 $(NAME):		$(OBJ) $(HEADER)
-				$(CC) -o $(NAME) $(SRCS) $(CFLAGS) $(PHILO_FLAGS)
+				$(CC) -o $(NAME) $(SRCS) $(CFLAGS) $(LIBRARIES)
 
-san:			$(OBJ)
-				$(CC) -o $(NAME) $(SRCS) $(CFLAGS) $(SANFLAGS) $(PHILO_FLAGS)
+leaksan:		$(OBJ)
+				$(CC) -o $(NAME) $(SRCS) $(CFLAGS) $(LSANF) $(LIBRARIES)
+
+threadsan:		$(OBJ)
+				$(CC) -o $(NAME) $(SRCS) $(CFLAGS) $(TSANF) $(LIBRARIES)
+
+val:			$(OBJ)
+				$(CC) -o $(NAME) $(SRCS) $(CFLAGS) -g $(LIBRARIES)
 
 clean:
 				$(DEL) $(OBJ)
